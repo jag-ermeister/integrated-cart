@@ -1,0 +1,25 @@
+{
+  "name": "cart-js-consumer",
+  "version": "1.0.0",
+  "description": "Javascript consumer for cart API",
+  "engines": {
+    "node": ">=8"
+  },
+  "repository": {
+    "type": "git",
+    "url": "TODO"
+  },
+  "scripts": {
+    "test": "rimraf pacts && NODE_ENV=test mocha",
+    "publishPact": "node publishPact.js"
+  },
+  "devDependencies": {
+    "@pact-foundation/pact": "6.0.2",
+    "@pact-foundation/pact-node": "6.20.0",
+    "axios": "0.18.0",
+    "chai": "4.2.0",
+    "mocha": "5.2.0",
+    "rimraf": "2.6.2"
+  },
+  "dependencies": {}
+}

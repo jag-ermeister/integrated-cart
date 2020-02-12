@@ -1,0 +1,123 @@
+{
+  "consumer": {
+    "name": "CartJsConsumer"
+  },
+  "provider": {
+    "name": "CartAPI"
+  },
+  "interactions": [
+    {
+      "description": "Create a session",
+      "request": {
+        "method": "POST",
+        "path": "/session"
+      },
+      "response": {
+        "status": 201,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "id": "session-id",
+          "expiresAt": "2020-01-01T12:00:00Z"
+        }
+      }
+    },
+    {
+      "description": "Retrieve a session",
+      "request": {
+        "method": "GET",
+        "path": "/session/my-session-id"
+      },
+      "response": {
+        "status": 201,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "id": "my-session-id",
+          "expiresAt": "2020-01-01T12:00:00Z"
+        }
+      }
+    },
+    {
+      "description": "Get list of services",
+      "request": {
+        "method": "GET",
+        "path": "/services"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": [
+          {
+            "id": "string",
+            "title": "Smart Thermostat Installation",
+            "description": [
+              "We install Smart Thermostats",
+              "Remove existing thermostat and install smart thermostat"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "description": "Get a single service",
+      "request": {
+        "method": "GET",
+        "path": "/services"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "id": "string",
+          "title": "Smart Thermostat Installation",
+          "description": [
+            "We install Smart Thermostats",
+            "Remove existing thermostat and install smart thermostat"
+          ]
+        }
+      }
+    },
+    {
+      "description": "A zipcode",
+      "request": {
+        "method": "GET",
+        "path": "/availability",
+        "query": "zipCode=90210&startDate=2020-01-27&productIds=1%2C2%2C3&sessionId=my_session_id"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "days": [
+            {
+              "date": "2020-01-27",
+              "times": [
+                "13:00:00/15:00:00"
+              ]
+            }
+          ],
+          "next": "2020-01-27",
+          "previous": "2020-01-27",
+          "session": {
+            "id": "my_session_id",
+            "expiresAt": "2020-01-01T12:00:00Z"
+          }
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "pactSpecification": {
+      "version": "2.0.0"
+    }
+  }
+}
