@@ -8,7 +8,7 @@ To run the JS Consumer contract tests from the repo's root directory:
 
 To deploy the documentation:
 ```
-cd docks
+cd docs
 docker build -t docs-image:v1 .
-docker run -d -p 80:80 docks-image:v1
+docker run -d -p 80:80 docs-image:v1
 ```
