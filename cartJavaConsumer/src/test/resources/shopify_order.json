@@ -1,0 +1,73 @@
+{
+  "order": {
+    "email": "lairdgroff@yahoo.com",
+    "customer": {
+      "email": "lairdgroff@yahoo.com",
+      "first_name": "Ford",
+      "last_name": "Prefect",
+      "default_address": {
+        "address1": "8601 S. Meridian Blvd",
+        "city": "Englewood",
+        "province": "Colorado",
+        "zip": "80112",
+        "phone": "7208381604",
+        "first_name": "Ford",
+        "last_name": "Prefect"
+      }
+    },
+    "note_attributes": [{
+      "name": "ClientName",
+      "value": "Google Direct"
+    }, {
+      "name": "Scheduled Date",
+      "value": "2020-02-17"
+    }, {
+      "name": "Appointment Time From",
+      "value": "10:00 AM"
+    }, {
+      "name": "Appointment Time To",
+      "value": "12:00 AM"
+    }, {
+      "name": "Appointment Window",
+      "value": "10:00 AM - 12:00 AM"
+    }, {
+      "name": "Partner Order ID",
+      "value": "h1"
+    }, {
+      "name": "Partner Reference ID",
+      "value": null
+    }
+    ],
+    "line_items": [{
+      "quantity": 1,
+      "properties": [{
+        "name": "PartnerOrderNumber",
+        "value": "h1001"
+      }
+      ],
+      "variant_id": "31086432976999"
+    }
+    ],
+    "billing_address": {
+      "address1": "8601 S. Meridian Blvd",
+      "city": "Englewood",
+      "province": "Colorado",
+      "zip": "80112",
+      "country": "US",
+      "phone": "7208381604",
+      "first_name": "Ford",
+      "last_name": "Prefect"
+    },
+    "shipping_address": {
+      "address1": "8601 S. Meridian Blvd",
+      "city": "Englewood",
+      "province": "Colorado",
+      "zip": "80112",
+      "country": "US",
+      "phone": "7208381604",
+      "first_name": "Ford",
+      "last_name": "Prefect"
+    },
+    "notify_customer": false
+  }
+}
