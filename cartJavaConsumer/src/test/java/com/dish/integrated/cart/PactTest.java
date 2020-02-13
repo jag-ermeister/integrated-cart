@@ -1,4 +1,4 @@
-package com.pivotal.demo;
+package com.dish.integrated.cart;
 
 import au.com.dius.pact.consumer.Pact;
 import au.com.dius.pact.consumer.PactProviderRuleMk2;
@@ -59,7 +59,7 @@ public class PactTest {
 
         var response = new RestTemplate().postForEntity(
             mockProvider.getUrl() + SHOPIFY_ORDERS_API,
-                new HttpEntity<String>(getResourceContents(SHOPIFY_ORDER_REQUEST_FILE), headers),
+                new HttpEntity<>(getResourceContents(SHOPIFY_ORDER_REQUEST_FILE), headers),
                 String.class
         );
 
