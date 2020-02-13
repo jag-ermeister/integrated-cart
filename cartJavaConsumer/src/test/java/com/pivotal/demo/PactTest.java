@@ -23,74 +23,61 @@ import java.nio.file.Paths;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
+import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 
 public class PactTest {
+
+    static final String SHOPIFY_ORDERS_API = "/admin/api/2020-01/orders.json";
+    static final String SHOPIFY_ORDER_REQUEST_FILE = "shopify_order_request.json";
+    static final String SHOPIFY_ORDER_RESPONSE_FILE = "shopify_order_response.json";
+
+    JsonParser parser = new JsonParser();
+
     @Rule
-    public PactProviderRuleMk2 mockProvider = new PactProviderRuleMk2("provider_service", "localhost", 8090, this);
+    public PactProviderRuleMk2 mockProvider = new PactProviderRuleMk2("shopify_orders_provider", "localhost", 8090, this);
 
-    //this defines the contract
-    @Pact(consumer = "consumer_service", provider="provider_service")
+    @Pact(consumer = "shopify_orders_consumer", provider="shopify_orders_provider")
     public RequestResponsePact createPact(PactDslWithProvider builder) {
-
-        String request = "";
-        String response = "";
-        try{
-            String path = "src";
-            Path requestPath = Paths.get(path, "test", "resources", "shopify_order.json");
-            Path responsePath = Paths.get(path, "test", "resources", "shopify_order_response.json");
-            response = Files.readString(responsePath);
-            request = Files.readString(requestPath);
-        }catch(IOException e){
-            throw new RuntimeException("Failed to read from File to initialize expected request and response values");
-        }
-
         return builder
                 .given("test POST")
                 .uponReceiving("POST REQUEST")
-                .path("/admin/api/2020-01/orders.json")
-                .body(request)
+                .path(SHOPIFY_ORDERS_API)
+                .body(getResourceContents(SHOPIFY_ORDER_REQUEST_FILE))
                 .method("POST")
                 .willRespondWith()
                 .status(201)
-                .headers(ImmutableMap.of("Content-Type", "application/json"))
-                .body(response)
+                .headers(ImmutableMap.of(CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
+                .body(getResourceContents(SHOPIFY_ORDER_RESPONSE_FILE))
                 .toPact();
     }
 
-    //this is a consumer test
-    //I should create a service/client that makes a call to a remote system and returns a DTO - assert on that
     @Test
-    @PactVerification //this annotation starts the mock http service
+    @PactVerification
     public void submitOrder_shouldReturn201WithProperHeaderAndBody() {
-        JsonParser parser = new JsonParser();
-
-        String request = "";
-        String expectedResponse = "";
-        JsonElement expectedResponseJson = null;
-        try{
-            String path = "src";
-            Path requestPath = Paths.get(path, "test", "resources", "shopify_order.json");
-            Path responsePath = Paths.get(path, "test", "resources", "shopify_order_response.json");
-            expectedResponse = Files.readString(responsePath);
-            expectedResponseJson = parser.parse(expectedResponse);
-            request = Files.readString(requestPath);
-            JsonElement expectedRequestJson = parser.parse(request);
-        } catch(IOException e){
-            throw new RuntimeException("Failed to read from File to initialize expected request and response values;");
-        }
-
-        HttpHeaders headers = new HttpHeaders();
+        var headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<String> entity = new HttpEntity<String>(request, headers);
-        // when
-        ResponseEntity<String> response = new RestTemplate().postForEntity(
-            mockProvider.getUrl() + "/admin/api/2020-01/orders.json",
-            entity,
-            String.class);
 
-        // then
+        var response = new RestTemplate().postForEntity(
+            mockProvider.getUrl() + SHOPIFY_ORDERS_API,
+                new HttpEntity<String>(getResourceContents(SHOPIFY_ORDER_REQUEST_FILE), headers),
+                String.class
+        );
+
         assertThat(response.getStatusCode().value()).isEqualTo(201);
-        assertThat(response.getHeaders().get("Content-Type").contains("application/json")).isTrue();
-        assertEquals(expectedResponseJson, parser.parse(response.getBody()));
+        assertThat(response.getHeaders().get(CONTENT_TYPE).contains(MediaType.APPLICATION_JSON_VALUE)).isTrue();
+        assertEquals(getJsonFromFile(SHOPIFY_ORDER_RESPONSE_FILE), parser.parse(response.getBody()));
+    }
+
+    private JsonElement getJsonFromFile(String filename) {
+        return parser.parse(getResourceContents(filename));
+    }
+
+    private String getResourceContents(String resourceFilename) {
+        try {
+            var resourceFilePath = Paths.get("src", "test", "resources", resourceFilename);
+            return Files.readString(resourceFilePath);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to read from resource file: " + resourceFilename);
+        }
     }
 }
