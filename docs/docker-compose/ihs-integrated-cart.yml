@@ -1,0 +1,28 @@
+version: '2'
+services:
+   integrated-cart:
+    image: docker-dev.global.dish.com/integrated_cart_documentation:latest
+    environment:
+      #BINARY_URL: https://artifactory.global.dish.com/artifactory/libs-release-dev/com/dish/ofm/review_env/ihs-customer-manager.jar
+      JAVA_OPTS: ''
+      MEMORY: 2048M
+      SPRING_CLOUD_CONFIG_ENABLED: 'true'
+      SPRING_CLOUD_CONFIG_URI: http://configserver-review.global.dish.com:8888
+      SPRING_PROFILES_ACTIVE: development
+      VAULT_SYNC_FORMAT: env,properties,vcap
+      VAULT_SYNC_ONE_TIME: 'true'
+      VAULT_SYNC_PATHS: ups/review/live/dish_properties
+      VAULT_SYNC_SSL_VERIFY: 'false'
+      VAULT_SYNC_URL: https://vault.global.dish.com
+      WILY: 'true'
+
+    tty: true
+    mem_reservation: 2147483648
+    labels:
+      io.rancher.scheduler.affinity:container_label_soft_ne: io.rancher.stack_service.name=ihs-customer-manager/ihs-customer-manager
+      traefik.port: '80'
+      traefik.enable: 'true'
+      io.rancher.container.pull_image: always
+    stdin_open: true
+
+
