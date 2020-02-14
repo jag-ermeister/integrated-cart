@@ -1,0 +1,13 @@
+{
+  "name": "integrated_cart_docs",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "markdown": "mkdir -p build/markdown && widdershins spec/index.yml -o slate/source/index.html.md",
+    "slate": "cd slate && bundle && bundle exec middleman build --clean",
+    "build": "npm run markdown && npm run slate"
+  },
+  "devDependencies": {
+    "widdershins": "^3.6.7"
+  }
+}

@@ -1,0 +1,336 @@
+openapi: 3.0.0
+info:
+  title: OnTech Installation Scheduling API
+  description: API for OnTech partners to allow customers to schedule
+    in-home installation services for their smarthome products.
+  version: 0.0.1
+  
+servers:
+  - url: http://localhost:8787
+    description: localhost
+
+paths:
+          
+  /session:
+    put:
+      summary: Create or update a scheduling session
+      tags:
+        - session
+      responses:
+        200:
+          description: Updated an existing session
+          content:
+            application/json:
+              schema:
+               $ref: '#/components/schemas/Session'
+        201:
+          description: Created a session
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Session'
+  /session/{id}:
+    get:
+      summary: Get session details
+      tags:
+        - session
+      parameters: 
+        - in: path
+          name: id
+          description: Session ID
+          schema:
+            type: string
+          required: true
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Session'
+        404:
+          description: Session not found. Either the id is unknown or the session has expired.
+
+  /services:
+    get:
+      summary: Return all OnTech services for partner
+      tags:
+        - services
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServicesList'
+  /services/{id}:
+    get:
+      summary: Return details for OnTech service
+      tags:
+        - services
+      parameters: 
+        - in: path
+          name: id
+          description: Service ID
+          schema:
+            type: string
+          required: true
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Service'
+        404:
+          description: Service not found
+
+  /availability:
+    get:
+      summary: Get availability for zip code, products, and start date
+      tags:
+        - availability
+      parameters:
+        - in: query
+          name: zipcode
+          description: US Zip Code
+          schema:
+            $ref: '#/components/schemas/Zipcode'
+          required: true
+        - in: query
+          name: productIds
+          description: Product IDs to check installation availability for
+          schema:
+            type: array
+            items:
+              type: string
+          required: true
+          style: form
+          explode: false
+        - in: query
+          name: startDate
+          description: First date to check availability. Must be on or after today.
+          required: true
+          schema:
+            $ref: '#/components/schemas/Date'
+        - in: query
+          name: sessionId
+          description: Customer's OnTech session id
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Availabilities'
+        400:
+          description: Bad request. Verify parameters are present and valid.
+        404:
+          description: No availability found
+  /availability/first:
+    get:
+      summary: Get next available installation for zip code, products, and start date
+      tags:
+        - availability
+      parameters:
+        - in: query
+          name: zipcode
+          description: US Zip Code
+          schema:
+            $ref: '#/components/schemas/Zipcode'
+          required: true
+        - in: query
+          name: productIds
+          description: Product IDs to check installation availability for
+          schema:
+            type: array
+            items:
+              type: string
+          required: true
+          style: form
+          explode: false
+        - in: query
+          name: startDate
+          description: First date to check availability. Must be on or after today.
+          required: true
+          schema:
+            $ref: '#/components/schemas/Date'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AvailableTime'
+        400:
+          description: Bad request. Verify parameters are present and valid.
+        404:
+          description: No availability found
+  
+  /orders:
+    post:
+      summary: Create an order
+      tags:
+        - order
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+      responses:
+        202:
+          description: Order accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderResponse'
+        400:
+          description: Bad request. Verify session has not expired and all required fields are present and valid.
+          
+components:
+  schemas:
+    Zipcode:
+      type: string
+      format: zipcode
+      example: '90210'
+    Date:
+      type: string
+      format: date
+      example: '2020-01-27'
+    Service:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+          description: Service display title
+          example: Smart Thermostat Installation
+        description:
+          type: array
+          items:
+            type: string
+          description: Service description bullet points
+          example:
+            - We install Smart Thermostats
+            - Remove existing thermostat and install smart thermostat
+            - Connect device to existing WiFi network and perform set up
+            - Install and set up mobile app
+            - Teach you how to use the thermostat and app features 
+            - 'Please note: A functioning thermostat is required at the installation area'
+    TimeSlot:
+      type: string
+      example: '13:00:00/15:00:00'
+    Session:
+      type: object
+      properties:
+        id:
+          type: string
+        expiresAt:
+          type: string
+          example: '2020-01-01T12:00:00Z'
+          description: Time this session will expire
+        zipcode:
+          allOf:
+            - $ref: '#/components/schemas/Zipcode'
+            - nullable: true
+            - description: The zipcode to use for installation
+        reservedTime:
+          allOf:
+            - $ref: '#/components/schemas/AvailableTime'
+            - nullable: true
+    ServicesList:
+      type: array
+      items:
+        $ref: '#/components/schemas/Service'
+    Availabilities:
+      type: object
+      description: Provides a list of days and time slots. Use `next` and `previous` to page through the calendar.
+      properties:
+        days:
+          type: array
+          items:
+            $ref: '#/components/schemas/AvailableDay'
+        next:
+          $ref: '#/components/schemas/Date'
+        previous:
+          $ref: '#/components/schemas/Date'
+        session:
+          $ref: '#/components/schemas/Session'
+    AvailableDay:
+      type: object
+      properties:
+        date:
+          $ref: '#/components/schemas/Date'
+        times:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimeSlot'
+    AvailableTime:
+      type: object
+      properties:
+        date:
+          $ref: '#/components/schemas/Date'
+        time:
+          $ref: '#/components/schemas/TimeSlot'
+    Order:
+      type: object
+      properties:
+        sessionId:
+          type: string
+        services:
+          type: array
+          items:
+            type: string
+        products:
+          description: Names of products being installed
+          type: array
+          items:
+            type: string
+        installationAddress:
+          $ref: '#/components/schemas/Address'
+        customer:
+          $ref: '#/components/schemas/Customer'
+        customerPhoneConsentAt:
+          type: string
+          format: timestamp
+          example: '2020-01-27T13:21:44Z'
+          description: 'The time the customer consented to phone calls from OnTech'
+    OrderResponse:
+      type: object
+      properties:
+        id:
+          type: string
+    Address:
+      type: object
+      properties:
+        street:
+          type: string
+          example: '9601 S Meridian Blvd'
+        city:
+          type: string
+          example: 'Engleweood'
+        state:
+          type: string
+          example: 'CO'
+        zipcode:
+          type: string
+          example: '80112'
+    Customer:
+      type: object
+      properties:
+        name:
+          type: string
+          example: 'Millard Fillmore'
+        phone:
+          type: string
+          format: phone
+          example: '7205007201'
+        email:
+          type: string
+          format: email
+          example: 'charlie.ergen@dish.com'
