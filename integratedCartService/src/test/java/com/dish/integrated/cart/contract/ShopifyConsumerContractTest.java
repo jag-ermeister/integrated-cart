@@ -1,4 +1,4 @@
-package com.dish.integrated.cart;
+package com.dish.integrated.cart.contract;
 
 import au.com.dius.pact.consumer.Pact;
 import au.com.dius.pact.consumer.PactProviderRuleMk2;
@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 
-public class PactTest {
+public class ShopifyConsumerContractTest {
 
     static final String SHOPIFY_ORDERS_API = "/admin/api/2020-01/orders.json";
     static final String SHOPIFY_ORDER_REQUEST_FILE = "shopify_order_request.json";
