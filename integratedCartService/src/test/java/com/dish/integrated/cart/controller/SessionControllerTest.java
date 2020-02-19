@@ -1,10 +1,9 @@
 package com.dish.integrated.cart.controller;
 
-import static org.hamcrest.Matchers.containsString;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.hamcrest.Matchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import org.junit.Test;
 
@@ -24,8 +23,9 @@ public class SessionControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    public void shouldReturnDefaultMessage() throws Exception {
-        this.mockMvc.perform(get("/")).andDo(print()).andExpect(status().isOk())
-                .andExpect(content().string(containsString("Hello, World")));
+    public void creatingSessionShouldReturn201() throws Exception {
+        this.mockMvc.perform(put("/session")).andDo(print()).andExpect(status().isCreated())
+                //.andExpect(content().json("{'message':[{'useRegEx':'false','hosts':'v2v2v2'}]}"));
+            .andExpect(jsonPath("$.zipcode", is("90210")));
     }
 }
