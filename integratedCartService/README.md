@@ -1,7 +1,7 @@
 To build integrated-cart-service and run locally in a docker container, run the following:
 ```
 ./gradlew build
-docker build -t integrated-cart-service .
+docker build -f Dockerfile-local -t integrated-cart-service .
 docker run -it --rm integrated-cart-service
 ```
 
