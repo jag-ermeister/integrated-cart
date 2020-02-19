@@ -1,5 +1,6 @@
 package com.dish.integrated.cart.repository;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
 import java.io.Serializable;
@@ -7,7 +8,7 @@ import java.io.Serializable;
 @RedisHash("Session")
 public class Session implements Serializable {
 
-    private String id;
+    @Id private String id;
     private String zipcode;
 
     public String getId() {
