@@ -2,12 +2,20 @@
   "name": "integrated_cart_docs",
   "version": "1.0.0",
   "description": "",
+  "license": "UNLICENSED",
   "scripts": {
-    "markdown": "mkdir -p build/markdown && widdershins spec/index.yml -o slate/source/index.html.md",
+    "markdown": "widdershins spec/index.yml -o slate/source/index.html.md",
     "slate": "cd slate && bundle && bundle exec middleman build --clean",
     "build": "npm run markdown && npm run slate"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://git-codecommit.us-east-1.amazonaws.com/v1/repos/integrated-cart"
+  },
   "devDependencies": {
     "widdershins": "^3.6.7"
+  },
+  "dependencies": {
+    "mkdirp": "^1.0.3"
   }
 }
