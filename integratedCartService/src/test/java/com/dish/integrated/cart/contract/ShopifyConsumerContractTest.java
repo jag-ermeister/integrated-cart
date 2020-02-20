@@ -21,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import static com.dish.integrated.cart.util.FileUtils.readFromFile;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
@@ -73,11 +74,7 @@ public class ShopifyConsumerContractTest {
     }
 
     private String getResourceContents(String resourceFilename) {
-        try {
-            Path resourceFilePath = Paths.get("src", "test", "resources", resourceFilename);
-            return Files.readString(resourceFilePath);
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to read from resource file: " + resourceFilename);
-        }
+        Path resourceFilePath = Paths.get("src", "test", "resources", resourceFilename);
+        return readFromFile(resourceFilePath.toString());
     }
 }
