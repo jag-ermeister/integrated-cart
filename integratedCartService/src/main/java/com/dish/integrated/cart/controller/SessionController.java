@@ -15,6 +15,12 @@ public class SessionController {
 
     @Autowired SessionRepository sessionRepository;
 
+    @RequestMapping("/hello")
+    @ResponseStatus(HttpStatus.OK)
+    public @ResponseBody String hello() {
+        return "Hello World!";
+    }
+
     @RequestMapping("/session")
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody Session greeting(@RequestBody Session request) {
