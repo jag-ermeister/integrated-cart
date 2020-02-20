@@ -15,6 +15,12 @@ public class SessionController {
 
     @Autowired SessionRepository sessionRepository;
 
+    @RequestMapping("/")
+    @ResponseStatus(HttpStatus.OK)
+    public @ResponseBody String healthCheck() {
+        return "My health is astonishingly excellent.";
+    }
+
     @RequestMapping("/hello")
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody String hello() {
