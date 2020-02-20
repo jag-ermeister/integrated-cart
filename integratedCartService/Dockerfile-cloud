@@ -1,4 +1,4 @@
 FROM adoptopenjdk/openjdk11:ubi
 RUN mkdir /opt/app
 ADD build/libs/integratedCartService.jar /opt/app
-CMD ["java", "SPRING_PROFILES_ACTIVE=cloud", "-jar", "/opt/app/integratedCartService.jar"]
+CMD ["java", "-Dspring.profiles.active=cloud", "-jar", "/opt/app/integratedCartService.jar"]
