@@ -1,3 +1,6 @@
+server:
+  port : 3000
+
 spring:
   redis:
     host: d-partner-api-redis.jqyuev.ng.0001.use1.cache.amazonaws.com
