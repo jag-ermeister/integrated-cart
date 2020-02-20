@@ -54,10 +54,10 @@ public class ShopifyConsumerContractTest {
     @Test
     @PactVerification
     public void submitOrder_shouldReturn201WithProperHeaderAndBody() {
-        var headers = new HttpHeaders();
+        HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        var response = new RestTemplate().postForEntity(
+        ResponseEntity<String> response = new RestTemplate().postForEntity(
             mockProvider.getUrl() + SHOPIFY_ORDERS_API,
                 new HttpEntity<>(getResourceContents(SHOPIFY_ORDER_REQUEST_FILE), headers),
                 String.class
@@ -74,7 +74,7 @@ public class ShopifyConsumerContractTest {
 
     private String getResourceContents(String resourceFilename) {
         try {
-            var resourceFilePath = Paths.get("src", "test", "resources", resourceFilename);
+            Path resourceFilePath = Paths.get("src", "test", "resources", resourceFilename);
             return Files.readString(resourceFilePath);
         } catch (IOException e) {
             throw new RuntimeException("Failed to read from resource file: " + resourceFilename);
