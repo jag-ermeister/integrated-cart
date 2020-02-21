@@ -1,6 +1,5 @@
 pipeline {
-
-    agent any
+    agent { docker { image 'adoptopenjdk/openjdk11:ubi' } }
 
     stages {
         stage('Compile and Test') {
@@ -13,7 +12,7 @@ pipeline {
             steps {
                 echo 'Building docker image...'
                 script {
-                    docker.build("integratedCartService/Dockerfile-cloud")
+                    docker.build("961905255215.dkr.ecr.us-east-1.amazonaws.com/ihs-partner-sessions:${env.Ver}")
                 }
             }
         }
