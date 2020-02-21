@@ -11,7 +11,7 @@ pipeline {
         stage('Build Docker Image') {
             agent {
                 docker {
-                  label 'docker-slave'  // both label and image
+                  label 'dockerslave'  // both label and image
                   image 'adoptopenjdk/openjdk11:ubi'
                 }
             }
