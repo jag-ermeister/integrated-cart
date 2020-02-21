@@ -2,17 +2,14 @@ pipeline {
     agent { docker { image 'adoptopenjdk/openjdk11:ubi' } }
 
     stages {
-        stage('Build') {
+        stage('Compile and Test') {
             steps {
-                echo 'Building..'
-                sh './gradlew build -x test'
+                echo 'Compiling and testing..'
+                sh './gradlew build'
             }
         }
-        stage('Test') {
-            steps {
-                echo 'Testing..'
-                sh './gradlew test'
-            }
+        stage('Build Docker Image') {
+            docker.build("integratedCartService/Dockerfile-cloud")
         }
         stage('Deploy') {
             steps {
