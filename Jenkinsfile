@@ -12,7 +12,7 @@ pipeline {
             steps {
                 echo 'Building docker image...'
                 script {
-                    docker.build("961905255215.dkr.ecr.us-east-1.amazonaws.com/ihs-partner-sessions", "integratedCartService")
+                    docker.build("961905255215.dkr.ecr.us-east-1.amazonaws.com/ihs-partner-sessions", "-f Dockerfile-cloud")
                 }
             }
         }
