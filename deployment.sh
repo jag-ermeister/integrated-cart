@@ -1,6 +1,7 @@
 cd integratedCartService
 
  
+ echo 'I am in here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
 
 #Build docker image
 
