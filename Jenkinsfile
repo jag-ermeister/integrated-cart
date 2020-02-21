@@ -1,5 +1,5 @@
 pipeline {
-    agent { docker { image 'adoptopenjdk/openjdk11:ubi' } }
+
 
     stages {
         stage('Compile and Test') {
