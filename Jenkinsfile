@@ -10,6 +10,7 @@ pipeline {
         }
         stage('Build Docker Image') {
             steps {
+                echo 'Building docker image...'
                 script {
                     docker.build("integratedCartService/Dockerfile-cloud")
                 }
