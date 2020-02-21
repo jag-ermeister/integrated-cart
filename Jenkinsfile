@@ -10,7 +10,9 @@ pipeline {
         }
         stage('Build Docker Image') {
             steps {
-                docker.build("integratedCartService/Dockerfile-cloud")
+                script {
+                    docker.build("integratedCartService/Dockerfile-cloud")
+                }
             }
         }
         stage('Deploy') {
